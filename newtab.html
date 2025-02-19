@@ -3,72 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <title>Generate Background with ComfyUI</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <style>
-    body {
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      width: 100vh;
-      height: 100vh;
-    }
-    /* Style for drag and drop area */
-    #node169DropArea {
-      border: 2px dashed #ccc;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-    /* Wrapper for the generated grid */
-    #gridWrapper {
-      max-width: 50vw;
-      min-width: 400px;
-      margin: 0 auto;
-    }
-    /* Grid for images */
-    #generatedGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-gap: 10px;
-    }
-    #generatedGrid img {
-      width: 100%;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    #generatedGrid img.selected {
-      border-color: blue;
-    }
-    #setBackgroundButton {
-      margin-top: 10px;
-    }
-  </style>
 </head>
-<body>
-  <h1>Generate Background</h1>
-  
-  <!-- File upload area for node 169 -->
-  <div id="node169DropArea">
-    Drag and drop image here for Node 169<br>or click to select a file.
+<body class="d-flex flex-column align-items-end justify-content-end">
+  <button id="generateBackgroundButton" class="btn btn-primary mb-3">Generate Background</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="backgroundModal" tabindex="-1" aria-labelledby="backgroundModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="backgroundModalLabel">Generate Background</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- File upload area for node 169 -->
+          <div id="node169DropArea" class="mb-3">
+            Drag and drop image here for Node 169<br>or click to select a file.
+          </div>
+          <input type="file" id="node169UploadInput" accept="image/*" style="display:none;">
+          <img id="node169Preview" src="" alt="Uploaded Image Preview" class="img-fluid mb-3" style="max-width:200px; display:none;">
+          
+          <!-- Progress display -->
+          <div id="progress" class="mb-3"></div>
+          
+          <!-- Wrapper for the generated grid -->
+          <div id="gridWrapper">
+            <div id="generatedGrid"></div>
+          </div>
+          
+          <!-- Generate button -->
+          <button id="startGenerationButton" class="btn btn-primary mt-3">Generate</button>
+          
+          <!-- Set as new tab background button -->
+          <button id="setBackgroundButton" class="btn btn-success mt-3" disabled>Set as new tab background</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <input type="file" id="node169UploadInput" accept="image/*" style="display:none;">
-  <img id="node169Preview" src="" alt="Uploaded Image Preview" style="max-width:200px; display:none; margin-bottom:10px;">
-  
-  <!-- Generate background button -->
-  <button id="generateBackgroundButton">Generate Background</button>
-  
-  <!-- Progress display -->
-  <div id="progress"></div>
-  
-  <!-- Wrapper for the generated grid -->
-  <div id="gridWrapper">
-    <div id="generatedGrid"></div>
-  </div>
-  
-  <!-- Set as new tab background button -->
-  <button id="setBackgroundButton" disabled>Set as new tab background</button>
-  
+
+  <script src="js/jquery-3.5.1.slim.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

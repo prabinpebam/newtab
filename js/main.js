@@ -11,16 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("node169UploadInput");
   const node169Preview = document.getElementById("node169Preview");
   const generateButton = document.getElementById("generateBackgroundButton");
+  const startGenerationButton = document.getElementById("startGenerationButton");
   const progressDiv = document.getElementById("progress");
   const generatedGrid = document.getElementById("generatedGrid");
   const setBackgroundButton = document.getElementById("setBackgroundButton");
-  
+  const backgroundModal = new bootstrap.Modal(document.getElementById('backgroundModal'));
+
   let uploadedImageFilename = null;
   let selectedImageBase64 = null; // Base64 string of the selected image
   let promptId = null;
   let currentWorkflow = {};
   let isPolling = false;
-  
+
   // Helper to convert blob to a base64 data URL.
   function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.readAsDataURL(blob);
     });
   }
-  
+
   // Setup drag & drop & file selection.
   dropArea.addEventListener("click", () => fileInput.click());
   dropArea.addEventListener("dragover", (e) => {
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       handleFile(fileInput.files[0]);
     }
   });
-  
+
   function handleFile(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
     uploadNode169Image(file);
   }
-  
+
   async function uploadNode169Image(file) {
     progressDiv.textContent = "Uploading image for node 169...";
     const formData = new FormData();
@@ -83,34 +85,39 @@ document.addEventListener("DOMContentLoaded", () => {
       progressDiv.textContent = "Error uploading image: " + error.message;
     }
   }
-  
-  // Trigger background generation when "Generate Background" is clicked.
+
+  // Show the modal when "Generate Background" button is clicked.
   generateButton.addEventListener("click", () => {
+    backgroundModal.show();
+  });
+
+  // Trigger background generation when "Generate" button is clicked.
+  startGenerationButton.addEventListener("click", () => {
     generateBackground();
   });
-  
+
   async function generateBackground() {
     // Clear previous images and disable the background CTA.
     generatedGrid.innerHTML = "";
     setBackgroundButton.disabled = true;
     selectedImageBase64 = null;
-    
+
     progressDiv.textContent = "Loading workflow...";
     try {
       const workflowResponse = await fetch("/workflow/Win11-stylized-wallpaper.json");
       if (!workflowResponse.ok) throw new Error("Failed to load workflow JSON.");
       let workflow = await workflowResponse.json();
       currentWorkflow = workflow;
-      
+
       // Replace node 169's image input with the uploaded image filename, if available.
       if (uploadedImageFilename && workflow["169"] && workflow["169"].inputs) {
         workflow["169"].inputs.image = uploadedImageFilename;
       }
-      
+
       progressDiv.textContent = "Workflow loaded. Starting background generation...";
-      
+
       const clientId = (crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).substring(2);
-      
+
       // Open WebSocket connection for progress updates.
       const ws = new WebSocket(`ws://127.0.0.1:8000/ws?clientId=${clientId}`);
       ws.onmessage = async function (event) {
@@ -137,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
           console.error("Error processing WebSocket message:", error);
         }
       };
-      
+
       // Send the modified workflow JSON to the ComfyUI server.
       const response = await fetch("http://127.0.0.1:8000/prompt", {
         method: "POST",
@@ -159,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
       progressDiv.textContent = "Error: " + error.message;
     }
   }
-  
+
   // Poll the history endpoint for nodes whose class_type is PreviewImage.
   async function pollForPreview() {
     isPolling = true;
@@ -212,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     poll();
   }
-  
+
   // Display images in the grid by converting blobs to base64.
   function displayImages(images) {
     generatedGrid.innerHTML = "";
@@ -240,15 +247,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-  
+
   // Save the selected image in local storage and set it as the background.
   setBackgroundButton.addEventListener("click", () => {
     if (selectedImageBase64) {
-      localStorage.setItem("backgroundImage", selectedImageBase64);
-      document.body.style.backgroundImage = `url(${selectedImageBase64})`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundPosition = "center";
-      progressDiv.textContent = "Background image saved to local storage.";
+      try {
+        localStorage.removeItem("backgroundImage");
+        localStorage.setItem("backgroundImage", selectedImageBase64);
+        document.body.style.backgroundImage = `url(${selectedImageBase64})`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        progressDiv.textContent = "Background image saved to local storage.";
+        backgroundModal.hide();
+      } catch (e) {
+        if (e.name === 'QuotaExceededError') {
+          console.error("Local storage quota exceeded. Unable to save background image.");
+          progressDiv.textContent = "Error: Local storage quota exceeded. Unable to save background image.";
+        } else {
+          console.error("Error saving background image:", e);
+          progressDiv.textContent = "Error saving background image: " + e.message;
+        }
+      }
     }
   });
 });
