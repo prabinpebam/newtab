@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 2em;
+  }
+  
+  #progress {
+    margin-top: 1em;
+    font-weight: bold;
+  }
+  
+  #outputImage {
+    margin-top: 1em;
+    max-width: 512px;
+    border: 1px solid #ccc;
+  }
+  

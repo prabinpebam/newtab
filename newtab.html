@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Background with ComfyUI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      width: 100vh;
+      height: 100vh;
+    }
+    /* Style for drag and drop area */
+    #node169DropArea {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    /* Wrapper for the generated grid */
+    #gridWrapper {
+      max-width: 50vw;
+      min-width: 400px;
+      margin: 0 auto;
+    }
+    /* Grid for images */
+    #generatedGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 10px;
+    }
+    #generatedGrid img {
+      width: 100%;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    #generatedGrid img.selected {
+      border-color: blue;
+    }
+    #setBackgroundButton {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Generate Background</h1>
+  
+  <!-- File upload area for node 169 -->
+  <div id="node169DropArea">
+    Drag and drop image here for Node 169<br>or click to select a file.
+  </div>
+  <input type="file" id="node169UploadInput" accept="image/*" style="display:none;">
+  <img id="node169Preview" src="" alt="Uploaded Image Preview" style="max-width:200px; display:none; margin-bottom:10px;">
+  
+  <!-- Generate background button -->
+  <button id="generateBackgroundButton">Generate Background</button>
+  
+  <!-- Progress display -->
+  <div id="progress"></div>
+  
+  <!-- Wrapper for the generated grid -->
+  <div id="gridWrapper">
+    <div id="generatedGrid"></div>
+  </div>
+  
+  <!-- Set as new tab background button -->
+  <button id="setBackgroundButton" disabled>Set as new tab background</button>
+  
+  <script src="js/main.js"></script>
+</body>
+</html>
