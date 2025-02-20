@@ -108,7 +108,7 @@
         3
       ],
       "steps": 8,
-      "cfg": 4,
+      "cfg": 2,
       "sampler_name": "lcm",
       "scheduler": "sgm_uniform",
       "denoise": 0.75,
@@ -274,7 +274,7 @@
   },
   "169": {
     "inputs": {
-      "image": "69f3097937f66a785f082478da3fde14.jpg",
+      "image": "bda2671c3b78f9ba9f0264f59782e1cc.jpg",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -314,7 +314,7 @@
         "172",
         0
       ],
-      "text2": " The image features a dynamic and powerful ocean wave. The wave is the central focus of the image, with its crest curling over in a dramatic display of natural energy. The colors used to depict the wave are predominantly blue and white, suggesting the water's motion and the foamy top of the wave.\n\nThe style of the artwork appears to be illustrative, with a detailed and realistic presentation of the ocean scene. This level of detail allows for the appreciation of the texture and movement inherent in the water.\n\nIn addition to the wave, there is a section of sky visible in the upper right corner of the image. It's a clear blue color, which complements the oceanic theme.\n\nThe overall composition of the image, with the wave dominating the frame and the sky providing contrast, creates a sense of depth and scale, emphasizing the grandeur of the natural world. The image does not contain any visible texts or other objects, making the ocean wave the sole subject of the artwork.  (Cloth texture, fabric pattern, cloth fold, fold, 3D layers, cloth fold, wave) Abstract 3D render,\nhigh quality, illustration, painting, "
+      "text2": " The image is a composite of two different photographs. On the left, there's a close-up photograph of fluffy white clouds against a clear blue sky, taken from below looking upwards. The clouds appear to be in motion, suggesting they might be low-level stratus or cirrus clouds.\n\nOn the right side of the image, there is a solid grey background that contrasts with the cloudy sky on the left. This transition creates an interesting juxtaposition between the natural elements and the abstract simplicity of the grey expanse. The style of the image suggests it could be used for various purposes such as visual storytelling, digital art, or as part of a presentation about clouds, weather conditions, or even metaphors for concepts like dreams, aspirations, or transcendence.  (Cloth texture, fabric pattern, cloth fold, fold, 3D layers, cloth fold, wave) Abstract 3D render,\nhigh quality, illustration, painting, "
     },
     "class_type": "ShowText|pysssss",
     "_meta": {
@@ -441,7 +441,7 @@
         3
       ],
       "steps": 8,
-      "cfg": 4,
+      "cfg": 2,
       "sampler_name": "lcm",
       "scheduler": "sgm_uniform",
       "denoise": 0.65,
@@ -503,7 +503,7 @@
         3
       ],
       "steps": 8,
-      "cfg": 4,
+      "cfg": 2,
       "sampler_name": "lcm",
       "scheduler": "sgm_uniform",
       "denoise": 0.55,
@@ -565,7 +565,7 @@
         3
       ],
       "steps": 8,
-      "cfg": 4,
+      "cfg": 2,
       "sampler_name": "lcm",
       "scheduler": "sgm_uniform",
       "denoise": 0.45,
@@ -654,7 +654,7 @@
   },
   "232": {
     "inputs": {
-      "seed": 163049768645388
+      "seed": 81213790435962
     },
     "class_type": "Seed",
     "_meta": {
@@ -721,15 +721,6 @@
       "title": "LoraLoaderModelOnly"
     }
   },
-  "246": {
-    "inputs": {
-      "text": "(Cloth texture, fabric pattern, cloth fold, fold, 3D layers, cloth fold, wave),\nhigh quality, illustration, painting, "
-    },
-    "class_type": "TextInput_",
-    "_meta": {
-      "title": "Text Input ♾️Mixlab"
-    }
-  },
   "249": {
     "inputs": {
       "query": "describe the image",
@@ -738,7 +729,7 @@
       "model": "llava:7b-v1.6",
       "keep_alive": 5,
       "format": "text",
-      "seed": 1699401253,
+      "seed": 1729640230,
       "images": [
         "169",
         0

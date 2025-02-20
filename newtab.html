@@ -2,45 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Generate Background with ComfyUI</title>
+  <title>New tab</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="d-flex flex-column align-items-end justify-content-end">
   <button id="generateBackgroundButton" class="btn btn-primary mb-3">Generate Background</button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="backgroundModal" tabindex="-1" aria-labelledby="backgroundModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="backgroundModalLabel">Generate Background</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- File upload area for node 169 -->
-          <div id="node169DropArea" class="mb-3">
-            Drag and drop image here for Node 169<br>or click to select a file.
+  <!-- Right Pane -->
+  <div id="rightPane">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+      <h5 class="mb-0">Generate Background</h5>
+      <button id="closePaneButton" class="btn btn-secondary">Close</button>
+    </div>
+    <div class="p-3">
+      <div class="accordion" id="accordionExample">
+        <!-- File upload area for node 169 -->
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                File Upload Area
+              </button>
+            </h2>
           </div>
-          <input type="file" id="node169UploadInput" accept="image/*" style="display:none;">
-          <img id="node169Preview" src="" alt="Uploaded Image Preview" class="img-fluid mb-3" style="max-width:200px; display:none;">
-          
-          <!-- Progress display -->
-          <div id="progress" class="mb-3"></div>
-          
-          <!-- Wrapper for the generated grid -->
-          <div id="gridWrapper">
-            <div id="generatedGrid"></div>
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div id="node169DropArea" class="mb-3 align-items-center">
+                <p>Drop an image for style reference<br>or click to select a file.</p>
+                <img id="node169Preview" src="" alt="Uploaded Image Preview" class="img-fluid mb-3" style="max-width:200px; display:none;">
+              </div>
+              <input type="file" id="node169UploadInput" accept="image/*" style="display:none;">
+            </div>
           </div>
-          
-          <!-- Generate button -->
-          <button id="startGenerationButton" class="btn btn-primary mt-3">Generate</button>
-          
-          <!-- Set as new tab background button -->
-          <button id="setBackgroundButton" class="btn btn-success mt-3" disabled>Set as new tab background</button>
         </div>
+        <!-- Wrapper for the generated grid -->
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Generated Grid Area
+              </button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              <div id="gridWrapper">
+                <div id="generatedGrid">
+                  <img src="" alt="Generated Image" class="img-fluid mb-3">
+                  <img src="" alt="Generated Image" class="img-fluid mb-3">
+                  <img src="" alt="Generated Image" class="img-fluid mb-3">
+                  <img src="" alt="Generated Image" class="img-fluid mb-3">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Progress display -->
+      <div id="progress" class="mb-3 mt-3 text-center"></div>
+      <!-- Generate button -->
+      <div class="d-flex justify-content-center mt-3">
+        <button id="startGenerationButton" class="btn btn-primary">Generate</button>
       </div>
     </div>
   </div>

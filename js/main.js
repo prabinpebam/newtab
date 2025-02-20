@@ -12,10 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const node169Preview = document.getElementById("node169Preview");
   const generateButton = document.getElementById("generateBackgroundButton");
   const startGenerationButton = document.getElementById("startGenerationButton");
+  const closePaneButton = document.getElementById("closePaneButton");
   const progressDiv = document.getElementById("progress");
   const generatedGrid = document.getElementById("generatedGrid");
-  const setBackgroundButton = document.getElementById("setBackgroundButton");
-  const backgroundModal = new bootstrap.Modal(document.getElementById('backgroundModal'));
+  const rightPane = document.getElementById("rightPane");
 
   let uploadedImageFilename = null;
   let selectedImageBase64 = null; // Base64 string of the selected image
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       node169Preview.src = e.target.result;
-      node169Preview.style.display = "block";
+      node169Preview.style.display = "inline-block";
     };
     reader.readAsDataURL(file);
     uploadNode169Image(file);
@@ -86,20 +86,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Show the modal when "Generate Background" button is clicked.
+  // Show the right pane when "Generate Background" button is clicked.
   generateButton.addEventListener("click", () => {
-    backgroundModal.show();
+    rightPane.classList.add("show");
+  });
+
+  // Close the right pane when "Close" button is clicked.
+  closePaneButton.addEventListener("click", () => {
+    rightPane.classList.remove("show");
   });
 
   // Trigger background generation when "Generate" button is clicked.
   startGenerationButton.addEventListener("click", () => {
     generateBackground();
+    // Collapse the file upload area and expand the generated grid area.
+    $('#collapseTwo').collapse('show');
   });
 
   async function generateBackground() {
     // Clear previous images and disable the background CTA.
     generatedGrid.innerHTML = "";
-    setBackgroundButton.disabled = true;
     selectedImageBase64 = null;
 
     progressDiv.textContent = "Loading workflow...";
@@ -202,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
           if (uniqueImages.length > 0) {
             progressDiv.textContent = "Generation completed. Preview images available.";
-            displayImages(uniqueImages);
+            displayImages(uniqueImages);            
             isPolling = false;
             return;
           }
@@ -239,7 +245,47 @@ document.addEventListener("DOMContentLoaded", () => {
           });
           imgElem.classList.add("selected");
           selectedImageBase64 = imgElem.dataset.base64;
-          setBackgroundButton.disabled = false;
+          // Save the selected image in local storage and set it as the background.
+          if (selectedImageBase64) {
+            try {
+              // Clear previously stored image
+              const previousImage = localStorage.getItem("backgroundImage");
+              if (previousImage) {
+                console.log("Removing previous background image from local storage.");
+                localStorage.removeItem("backgroundImage");
+              }
+              // Store the new image
+              localStorage.setItem("backgroundImage", selectedImageBase64);
+              document.body.style.backgroundImage = `url(${selectedImageBase64})`;
+              document.body.style.backgroundSize = "cover";
+              document.body.style.backgroundPosition = "center";
+              progressDiv.textContent = "Background image saved to local storage.";
+              
+              // Log the size of the stored image
+              const storedImageSize = (selectedImageBase64.length * 2) / 1024; // size in KB
+              console.log(`Stored background image size: ${storedImageSize.toFixed(2)} KB`);
+              
+              // Log the number of items in local storage and their sizes
+              let totalSize = 0;
+              console.log("Current local storage items:");
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                const size = (value.length * 2) / 1024; // size in KB
+                totalSize += size;
+                console.log(`- ${key}: ${size.toFixed(2)} KB`);
+              }
+              console.log(`Total local storage size: ${totalSize.toFixed(2)} KB`);
+            } catch (e) {
+              if (e.name === 'QuotaExceededError') {
+                console.error("Local storage quota exceeded. Unable to save background image.");
+                progressDiv.textContent = "Error: Local storage quota exceeded. Unable to save background image.";
+              } else {
+                console.error("Error saving background image:", e);
+                progressDiv.textContent = "Error saving background image: " + e.message;
+              }
+            }
+          }
         });
         generatedGrid.appendChild(imgElem);
       } catch (err) {
@@ -247,27 +293,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
-  // Save the selected image in local storage and set it as the background.
-  setBackgroundButton.addEventListener("click", () => {
-    if (selectedImageBase64) {
-      try {
-        localStorage.removeItem("backgroundImage");
-        localStorage.setItem("backgroundImage", selectedImageBase64);
-        document.body.style.backgroundImage = `url(${selectedImageBase64})`;
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center";
-        progressDiv.textContent = "Background image saved to local storage.";
-        backgroundModal.hide();
-      } catch (e) {
-        if (e.name === 'QuotaExceededError') {
-          console.error("Local storage quota exceeded. Unable to save background image.");
-          progressDiv.textContent = "Error: Local storage quota exceeded. Unable to save background image.";
-        } else {
-          console.error("Error saving background image:", e);
-          progressDiv.textContent = "Error saving background image: " + e.message;
-        }
-      }
-    }
-  });
 });
