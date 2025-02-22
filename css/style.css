@@ -20,10 +20,11 @@ body {
   margin: 0 auto;
 }
 /* Grid for images */
-#generatedGrid {
+#imagesContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+  width: 526px;
 }
 #generatedGrid img {
   width: 100%;
@@ -33,9 +34,11 @@ body {
 #generatedGrid img.selected {
   border-color: blue;
 }
-#setBackgroundButton {
-  margin-top: 10px;
+#noiseCanvas{
+  border-radius: 20px;
 }
+
+
 /* Right pane */
 #rightPane {
   position: fixed;
@@ -53,3 +56,4 @@ body {
 #rightPane.show {
   transform: translateX(0);
 }
+

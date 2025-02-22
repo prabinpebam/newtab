@@ -1,6 +1,7 @@
 # New Tab Background Generator
 
 This project is a web application that allows users to generate and set a custom background image for a new browser tab. The application provides a user-friendly interface for uploading an image, generating a stylized background, and setting it as the background for the new tab.
+The image generation is done using ComfyUI which is running in the background.
 
 ## Features
 
